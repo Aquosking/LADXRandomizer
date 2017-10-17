@@ -1,0 +1,11 @@
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\obj\Debug\LADXRandForms.csproj.GenerateResource.Cache
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\obj\Debug\LADXRandForms.csproj.CoreCompileInputs.cache
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\bin\Debug\LADXRandomizer.exe.config
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\bin\Debug\LADXRandomizer.exe
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\bin\Debug\LADXRandomizer.pdb
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\obj\Debug\LADXRandomizer.Properties.Resources.resources
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\obj\Debug\LADXRandomizer.exe
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\obj\Debug\LADXRandomizer.pdb
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\obj\Debug\LADXRandomizer.Form1.resources
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\bin\Debug\LADXRandomizer.exe.CodeAnalysisLog.xml
+C:\Users\Thomas\source\repos\LADXRandForms\LADXRandForms\bin\Debug\LADXRandomizer.exe.lastcodeanalysissucceeded
