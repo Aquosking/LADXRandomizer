@@ -33,7 +33,7 @@ namespace LADXRandomizer
             return entryReq(Randomizer.linkInventory);
         }
         //Sets the contents of the location at index 'index' to 'item', removes the chest from chestTmp, and then returns the chest.
-        public Location setLocationContents(ref List <Location> locTmp, int index, byte item)
+        public Location setLocationContents(List <Location> locTmp, int index, byte item)
         {
             locTmp[index].setContents(new Item(item));
             Location tmp = locTmp[index];
@@ -54,16 +54,16 @@ namespace LADXRandomizer
             int r = rnd.Next(locTemp.Count());
             for (int i = 0; i < keyCount; i++)
             {
-                locFinished.Add(setLocationContents(ref locTemp, r, 0x1A));
+                locFinished.Add(setLocationContents(locTemp, r, 0x1A));
             }
             r = rnd.Next(locTemp.Count());
-            locFinished.Add(setLocationContents(ref locTemp, r, 0x16));
+            locFinished.Add(setLocationContents(locTemp, r, 0x16));
             r = rnd.Next(locTemp.Count());
-            locFinished.Add(setLocationContents(ref locTemp, r, 0x17));
+            locFinished.Add(setLocationContents(locTemp, r, 0x17));
             r = rnd.Next(locTemp.Count());
-            locFinished.Add(setLocationContents(ref locTemp, r, 0x18));
+            locFinished.Add(setLocationContents(locTemp, r, 0x18));
             r = rnd.Next(locTemp.Count());
-            locFinished.Add(setLocationContents(ref locTemp, r, 0x19));
+            locFinished.Add(setLocationContents(locTemp, r, 0x19));
             
             return locTemp;
         }

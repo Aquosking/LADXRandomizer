@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace LADXRandomizer
 {
+    using static ItemConstants;
+
     class ReqInstances
     {
         public static Requirement CanLeaveWestKoholint;
@@ -50,63 +52,63 @@ namespace LADXRandomizer
         {
             if (difficulty.Equals("CASUAL"))
             {
-                CanLeaveWestKoholint = delegate (List<Item> i) { return Comparer.has(i, ItemConstants.POWER_BRACELET); };
+                CanLeaveWestKoholint = delegate (List<Item> i) { return Comparer.has(i, POWER_BRACELET); };
 
-                L2_POWER_BRACELET = delegate (List<Item> i) { return Comparer.has2(i, ItemConstants.POWER_BRACELET); };
+                L2_POWER_BRACELET = delegate (List<Item> i) { return Comparer.has2(i, POWER_BRACELET); };
 
-                L2_SHIELD = delegate (List<Item> i) { return Comparer.has2(i, ItemConstants.POWER_BRACELET); };
+                L2_SHIELD = delegate (List<Item> i) { return Comparer.has2(i, POWER_BRACELET); };
 
-                CanEnterD1 = delegate (List<Item> i) { return Comparer.has(i, ItemConstants.TAIL_KEY); };
+                CanEnterD1 = delegate (List<Item> i) { return Comparer.has(i, TAIL_KEY); };
 
                 CanBeatD1 = delegate (List<Item> i) 
                 {
                     /* Pass Dungeon 1's item locations or a list of every item location */
                     Location[] D1Locations = null;
                     Location D1BombRoom = getLocation(D1Locations, 0x5066C);
-                    if (Comparer.compare(D1BombRoom.getContents(), ItemConstants.NIGHTMARE_KEY))
+                    if (Comparer.compare(D1BombRoom.getContents(), NIGHTMARE_KEY))
                     {
-                        return CanEnterD1(i) && Comparer.has(i, ItemConstants.BOMB) && Comparer.has(i, ItemConstants.ROCS_FEATHER);
+                        return CanEnterD1(i) && Comparer.has(i, BOMB) && Comparer.has(i, ROCS_FEATHER);
                     }
-                    else return CanEnterD1(i) && Comparer.has(i, ItemConstants.ROCS_FEATHER);
+                    else return CanEnterD1(i) && Comparer.has(i, ROCS_FEATHER);
                 };
 
-                CanPassOrAvoidRaccoon = delegate (List<Item> i) { return (Comparer.has(i, ItemConstants.SWORD) && (Comparer.has(i, ItemConstants.MAGIC_POWDER) || Comparer.has(i, ItemConstants.ROCS_FEATHER))) || Comparer.has(i, ItemConstants.POWER_BRACELET); };
+                CanPassOrAvoidRaccoon = delegate (List<Item> i) { return (Comparer.has(i, SWORD) && (Comparer.has(i, MAGIC_POWDER) || Comparer.has(i, ROCS_FEATHER))) || Comparer.has(i, POWER_BRACELET); };
 
                 CanGetBowWow = delegate (List<Item> i) { return CanBeatD1(i); };
 
-                CanEnterD2 = delegate (List<Item> i) { return CanGetBowWow(i) || Comparer.has(i, ItemConstants.MAGIC_ROD) || Comparer.has(i, ItemConstants.HOOKSHOT); };
+                CanEnterD2 = delegate (List<Item> i) { return CanGetBowWow(i) || Comparer.has(i, MAGIC_ROD) || Comparer.has(i, HOOKSHOT); };
 
                 CanGetSlimeKey = delegate (List<Item> i) { return false; };
 
-                CanEnterD3 = delegate (List<Item> i) { return CanLeaveWestKoholint(i) && CanGetSlimeKey(i) && (Comparer.has(i, ItemConstants.FLIPPERS) || Comparer.has(i, ItemConstants.ROCS_FEATHER)); };
+                CanEnterD3 = delegate (List<Item> i) { return CanLeaveWestKoholint(i) && CanGetSlimeKey(i) && (Comparer.has(i, FLIPPERS) || Comparer.has(i, ROCS_FEATHER)); };
 
-                CanBeatD3 = delegate (List<Item> i) { return CanEnterD3(i) && Comparer.has(i, ItemConstants.PEGASUS_BOOTS); };
+                CanBeatD3 = delegate (List<Item> i) { return CanEnterD3(i) && Comparer.has(i, PEGASUS_BOOTS); };
 
                 CanGetAnglerKey = delegate (List<Item> i) { return CanBeatD3(i); };
 
                 CanEnterD4 = delegate (List<Item> i) { return CanGetAnglerKey(i); };
 
-                CanEnterD5 = delegate (List<Item> i) { return CanLeaveWestKoholint(i) && Comparer.has(i, ItemConstants.FLIPPERS); };
+                CanEnterD5 = delegate (List<Item> i) { return CanLeaveWestKoholint(i) && Comparer.has(i, FLIPPERS); };
                 
                 // Try to jump the gap to D6 using PEGASUS BOOTS and ROCS_FEATHER 
-                CanEnterD6 = delegate (List<Item> i) { return CanLeaveWestKoholint(i) && Comparer.has(i, ItemConstants.FLIPPERS) && Comparer.has(i, ItemConstants.HOOKSHOT); };
+                CanEnterD6 = delegate (List<Item> i) { return CanLeaveWestKoholint(i) && Comparer.has(i, FLIPPERS) && Comparer.has(i, HOOKSHOT); };
 
                 CanEnterD7 = delegate (List<Item> i)
                 {
                     return
                         L2_POWER_BRACELET(i) &&
-                        Comparer.has(i, ItemConstants.PEGASUS_BOOTS) &&
-                        Comparer.has(i, ItemConstants.ROCS_FEATHER) &&
-                        Comparer.has(i, ItemConstants.HOOKSHOT) &&
-                        Comparer.has(i, ItemConstants.OCARINA);
+                        Comparer.has(i, PEGASUS_BOOTS) &&
+                        Comparer.has(i, ROCS_FEATHER) &&
+                        Comparer.has(i, HOOKSHOT) &&
+                        Comparer.has(i, OCARINA);
                 };
 
                 CanEnterD8 = delegate (List<Item> i)
                 {
                     return
                         L2_SHIELD(i) &&
-                        Comparer.has(i, ItemConstants.OCARINA) &&
-                        Comparer.has(i, ItemConstants.POWER_BRACELET);
+                        Comparer.has(i, OCARINA) &&
+                        Comparer.has(i, POWER_BRACELET);
                 };
             }
         }
