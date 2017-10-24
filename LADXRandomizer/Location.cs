@@ -7,7 +7,7 @@ using System.IO;
 
 namespace LADXRandomizer
 {
-    public delegate void Write();
+    delegate void Write();
     class Location
     {
         // 0x50560 is the offset for treasure
@@ -74,6 +74,11 @@ namespace LADXRandomizer
             return contents;
         }
 
+        public long getMap()
+        {
+            return map;
+        }
+
         public long getChestAddress()
         {
             return 0x50560 + map;
@@ -92,6 +97,11 @@ namespace LADXRandomizer
         public void addItemException(Item theItem)
         {
             neverContain.Add(theItem);
+        }
+
+        public List<Item> getExceptions()
+        {
+            return neverContain;
         }
 
         public void write()

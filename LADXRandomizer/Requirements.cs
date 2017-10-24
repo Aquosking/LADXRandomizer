@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LADXRandomizer
 {
-    public delegate bool Requirement(List <Item> items);
+    delegate bool Requirement(List <Item> items);
 
-    public class Comparer
+    class Comparer
     {
         public static bool compare(Item item, byte i)
         {

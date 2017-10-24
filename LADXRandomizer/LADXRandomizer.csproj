@@ -48,7 +48,7 @@
     <Compile Include="Dungeon.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Randomizer.cs" />
-    <Compile Include="ReqInstances.cs" />
+    <Compile Include="Version.cs" />
     <Compile Include="Requirements.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemConstants.cs" />

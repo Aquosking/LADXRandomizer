@@ -28,9 +28,17 @@ namespace LADXRandomizer
         {
             return entryReq;
         }
-        public bool canEnter()
+        public bool canEnter(List<Item> inventory)
         {
-            return entryReq(Randomizer.linkInventory);
+            return entryReq(inventory);
+        }
+        public List<Location> getLocations()
+        {
+            return locations;
+        }
+        public int getKeyCount()
+        {
+            return keyCount;
         }
         //Sets the contents of the location at index 'index' to 'item', removes the chest from chestTmp, and then returns the chest.
         public Location setLocationContents(List <Location> locTmp, int index, byte item)

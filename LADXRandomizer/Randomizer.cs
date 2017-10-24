@@ -8,10 +8,14 @@ namespace LADXRandomizer
 {
     using static ItemConstants;
 
-    public class Randomizer
+    class Randomizer
     {
-        public static List<Item> linkInventory;
+        public List<Item> linkInventory;
 
+        public Version ver;
+
+        private int seed;
+        private Random rand;
         private List<Location> locs;
         private Dungeon D1;
         private Dungeon D2;
@@ -23,286 +27,97 @@ namespace LADXRandomizer
         private Dungeon D8;
         private Dungeon DC;
 
-        public Randomizer()
+        private readonly Item[] startInventory = new Item[] { new Item(SWORD), new Item(SHIELD), new Item(MAGIC_POWDER), new Item(BOMB), new Item(BOW), new Item(SHOVEL) };
+
+        private List<Location> finishedLocs;
+
+        public Randomizer(Version v)
         {
-            initLocations();
-            linkInventory = new List<Item> { new Item(SWORD), new Item(SHIELD), new Item(MAGIC_POWDER), new Item(BOMB), new Item(BOW), new Item(SHOVEL) };
+            ver = v;
+            linkInventory = new List<Item> (startInventory);
+            finishedLocs = new List<Location> { };
+            Random rnd = new Random();
+            seed = rnd.Next();
+            rand = new Random(seed);
+        }
+        public Randomizer(Version v, int seed_)
+        {
+            ver = v;
+            linkInventory = new List<Item> (startInventory);
+            finishedLocs = new List<Location> { };
+            seed = seed_;
+            rand = new Random(seed);
+        }
+
+        /* Rework this function so that the index is generated inside instead of passed as argument */
+        public Location distributeItem(List<Location> locs, byte item_)
+        {
+            bool locIsValid = false;
+            int index = rand.Next(locs.Count());
+            Item item = new Item(item_);
+            List<Location> locTemp = new List<Location>(locs);
+            while (!locIsValid && locTemp.Count() > 0)
+            { 
+                if (locTemp[index].getExceptions().Contains(item))
+                {
+                    locTemp.RemoveAt(index);
+                    index = rand.Next(locTemp.Count());
+                }
+                else
+                {
+                    locIsValid = true;
+                }
+            }
+            if (locIsValid)
+            {
+                locTemp[index].setContents(item);
+                locs.Remove(locTemp[index]);
+                return locTemp[index];
+            }
+            else
+            {
+                Console.Write("COULD NOT FIND VALID LOCATION FOR ITEM " + item_ + " IN FOLLOWING LIST OF LOCATIONS: " +  "\n" + locListToString(locs));
+                return null;
+            }
+        }
+
+        public String locListToString(List<Location> locs)
+        {
+            String tmp = "";
+            foreach (Location loc in locs)
+            {
+                tmp += loc.getMap() + "\n";
+            }
+            return tmp;
+        }
+
+        private List<Location> randomizeDungeon(Dungeon d)
+        {
+            List<Location> locTemp = new List<Location> (d.getLocations());
+            for (int i = 0; i < d.getKeyCount(); i++)
+            {
+                finishedLocs.Add(distributeItem(locTemp, SMALL_KEY));
+            }
+            finishedLocs.Add(distributeItem(locTemp, MAP));
+            finishedLocs.Add(distributeItem(locTemp, STONE_BEAK));
+            finishedLocs.Add(distributeItem(locTemp, COMPASS));
+            finishedLocs.Add(distributeItem(locTemp, NIGHTMARE_KEY));
+
+            return locTemp;
+        }
+
+        public void randomize()
+        {
+            for (int i = 1; i <= 9; i++)
+            {
+                locs.AddRange(randomizeDungeon(ver.getDungeon(i)));
+            }
 
         }
-        private void initLocations()
-        {
-            Location test = new Location(0x0000, 0, null, delegate () { return; }, delegate () { return; });
-            locs = new List<Location> { };
-            ReqCreator rc = new ReqCreator();
-            RequirementV1 r = new RequirementV1(null);
-            //Overworld Chests
-            //1
 
-            /* Heart Piece in Well */
-            /*
-            locs.Add
-            (
-                    new Location
-                    (
-                        0x02A4,
-                        0,
-                        delegate(List<Item> i)
-                        {
-                            return Comparer.contains(i, SWORD) || Comparer.contains(i, POWER_BRACELET);
-                        }
-                    )
-            );
-            */
-
-            /* Mysterious Woods Blocked by Rock Chest */
-            locs.Add
-            (
-                new Location
-                (
-                    0x0071,
-                    0,
-                    delegate (List<Item> i)
-                    {
-                        return Comparer.has(i, POWER_BRACELET);
-                    }
-                )
-            );
-
-            /* Mysterious Woods Cave 02BD */
-            locs.Add
-            (
-                new Location
-                (
-                    0x02BD,
-                    0,
-                    delegate (List<Item> i)
-                    {
-                        return Comparer.has(i, SWORD);
-                    }
-                )
-            );
-
-            /* Mysterious Woods Heart Piece Cave 02AB */
-            /*
-            locs.Add
-            (
-                new Location
-                (
-                    0x02AB,
-                    0,
-                    delegate (List<Item> i)
-                    {
-                        return Comparer.contains(i, POWER_BRACELET);
-                    }
-                )
-            );
-            */
-
-            /* Overworld Heart Piece Surrounded by Holes */
-            /*
-            locs.Add
-            (
-                new Location
-                (
-                    0x0044,
-                    0,
-                    delegate (List<Item> i)
-                    {
-                        return Comparer.contains(i, ROCS_FEATHER) && (Comparer.contains(i, SWORD) || Comparer.contains(i, POWER_BRACELET));
-                    }
-                )
-            );
-            */
-
-            /* Tail Key Chest */
-            locs.Add
-            (
-                new Location
-                (
-                    0x0041,
-                    0,
-                    ReqInstances.CanPassOrAvoidRaccoon
-                )
-            );
-            /*
-            locs.Add
-            (
-                new Location
-                (
-
-                )
-            );
-            */
-            /*
-            r = new RequirementV1(rc.NewReq(rc.NewReq(rc.NewReq(SWORD, "AND", POWER_BRACELET), "AND", rc.NewReq(PEGASUS_BOOTS, "AND", FLIPPERS)), "AND", HOOKSHOT));
-            chests.Add(new Chest(0x50564, r));
-            //2
-            r = new RequirementV1(rc.NewReq(SWORD, "AND", POWER_BRACELET));
-            chests.Add(new Chest(0x50578, r));
-            //3
-            r = new RequirementV1(rc.NewReq(rc.NewReq(rc.NewReq(SWORD, "AND", POWER_BRACELET), "AND", rc.NewReq(PEGASUS_BOOTS, "AND", FLIPPERS)), "AND", BOMB));
-            chests.Add(new Chest(0x5057D, r));
-            //4
-            r = new RequirementV1(rc.NewReq(rc.NewReq(rc.NewReq(SWORD, "AND", rc.NewReq(ROCS_FEATHER, "OR", MAGIC_POWDER)), "OR", POWER_BRACELET), "AND", rc.NewReq(HOOKSHOT, "OR", MAGIC_ROD)));
-            chests.Add(new Chest(0x50594, r));
-            //5
-            r = new RequirementV1(rc.NewReq(rc.NewReq(SWORD, "AND", rc.NewReq(ROCS_FEATHER, "OR", MAGIC_POWDER)), "OR", POWER_BRACELET));
-            chests.Add(new Chest(0x505A1, r));
-            //6
-            r = new RequirementV1(rc.NewReq(POWER_BRACELET, "AND", rc.NewReq(HOOKSHOT, "OR", FLIPPERS)));
-            chests.Add(new Chest(0x505BC, r));
-            //7
-            chests.Add(new Chest(0x505BD, r));
-            //8
-            r = new RequirementV1(rc.NewReq(POWER_BRACELET, "AND", FLIPPERS));
-            chests.Add(new Chest(0x505CC, r));
-            //9
-            r = new RequirementV1(rc.NewReq(POWER_BRACELET));
-            chests.Add(new Chest(0x505D1, r));
-            //10
-            chests.Add(new Chest(0x50645, r));
-            */
-            return;
-        }
-        private void initDungeons()
-        {
-            /* FIRST DUNGEON */
-            D1 = new Dungeon
-            (
-                ReqInstances.CanEnterD1,
-                /* Locations of randomizable chests */
-                new List<Location>
-                {
-                    new Location
-                    (
-                        0x0115,
-                        0,
-                        delegate (List<Item> i)
-                        {
-                            return Comparer.has(i, SWORD);
-                        }
-                    ),
-                    new Location
-                    (
-                        0x0113,
-                        0,
-                        delegate (List<Item> i)
-                        {
-                            return true;
-                        }
-                    ),
-                    new Location
-                    (
-                        0x0114,
-                        0,
-                        delegate (List<Item> i)
-                        {
-                            return Comparer.has(i, SWORD);
-                        }
-                    ),
-                    new Location
-                    (
-                        0x010C,
-                        0,
-                        delegate (List<Item> i)
-                        {
-                            return Comparer.has(i, BOMB);
-                        }
-                    ),
-                    new Location
-                    (
-                        0x010D,
-                        0,
-                        delegate (List<Item> i)
-                        {
-                            return Comparer.has(i, SWORD);
-                        }
-                    ),
-                    new Location
-                    (
-                        0x010E,
-                        0,
-                        delegate (List<Item> i)
-                        {
-                            return true;
-                        }
-                    ),
-                    new Location
-                    (
-                        0x011D,
-                        0,
-                        delegate (List<Item> i)
-                        {
-                            return Comparer.hasX(i, SMALL_KEY, 3) && Comparer.has(i, SHIELD) && Comparer.has(i, SWORD);
-                        },
-                        new List<Item> { new Item(SMALL_KEY) }
-                    ),
-                    new Location
-                    (
-                        0x0108,
-                        0,
-                        delegate(List<Item> i)
-                        {
-                            return Comparer.hasX(i, SMALL_KEY, 3) && Comparer.has(i, ROCS_FEATHER);
-                        },
-                        new List<Item> { new Item(SMALL_KEY) }
-                    ),
-                    new Location
-                    (
-                        0x010A,
-                        0,
-                        delegate(List<Item> i)
-                        {
-                            return Comparer.hasX(i, SMALL_KEY, 3) && Comparer.has(i, SWORD);
-                        },
-                        new List<Item> { new Item(SMALL_KEY) }
-                    )
-                },
-
-                /* Items whose location can't be randomized, but getting them is important for requirements */
-                new List<Location>
-                {
-                    new Location
-                    (
-                        0x0116,
-                        0,
-                        delegate (List<Item> i)
-                        {
-                            return Comparer.has(i, SWORD) || Comparer.has(i, SHIELD);
-                        },
-                        new Item(SMALL_KEY)
-                    )
-                },
-                2 // Randomizable keys
-            );
-
-            /* SECOND DUNGEON */
-            D2 = new Dungeon
-            (
-                ReqInstances.CanEnterD2,
-                /* Locations of randomizable chests */
-                new List<Location>
-                {
-                    // 9 chests
-                },
-                /* Items whose location can't be randomized, but getting them is important for requirements */
-                new List<Location>
-                {
-                    // 2 keys
-                },
-                3 // Randomizable keys
-            );
-        }
+        
         private void initChestsUnderworld2()
         {
-
-        }
-        private void randomize()
-        {
-            List<Location> D1Remain = D1.randomize();
-            List<Location> D2Remain = D2.randomize();
-            List<Location> D3Remain = D3.randomize();
-            List<Location> D4Remain = D4.randomize();
 
         }
     }
