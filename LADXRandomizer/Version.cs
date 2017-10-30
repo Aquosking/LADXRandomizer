@@ -269,6 +269,7 @@ namespace LADXRandomizer
         {
             switch (difficulty)
             {
+                /** Casual Difficulty - The default difficulty **/
                 case "CASUAL":
                     D1 = new Dungeon
                         (
@@ -396,6 +397,10 @@ namespace LADXRandomizer
                     );
                     break;
             }
+        }
+
+        public List<Location> getLocations() {
+            return locs;
         }
 
         public Location getLocation(Location[] locs, long mem)
