@@ -23,6 +23,9 @@ namespace LADXRandomizer
         private Dungeon D8;
         private Dungeon DC;
 
+        private List<Item> progressionItems;
+        private List<Item> allOtherItems;
+
         public Requirement CanLeaveWestKoholint;
         public Requirement L2_POWER_BRACELET;
         public Requirement L2_SHIELD;
@@ -66,6 +69,21 @@ namespace LADXRandomizer
             switch (difficulty)
             {
                 case "CASUAL":
+                default:
+                    progressionItems = new List<Item> 
+                    {
+                        new Item(POWER_BRACELET),
+                        new Item(TAIL_KEY),
+                        new Item(SHIELD),
+                        new Item(HOOKSHOT),
+                        new Item(MAGIC_ROD),
+                        new Item(PEGASUS_BOOTS),
+                        new Item(OCARINA),
+                        new Item(ROCS_FEATHER),
+                        new Item(FLIPPERS),
+                        new Item(POWER_BRACELET)
+                    };
+
                     CanLeaveWestKoholint = delegate (List<Item> i) { return Comparer.has(i, POWER_BRACELET); };
 
                     L2_POWER_BRACELET = delegate (List<Item> i) { return Comparer.has2(i, POWER_BRACELET); };
@@ -269,6 +287,7 @@ namespace LADXRandomizer
         {
             switch (difficulty)
             {
+                /** Casual Difficulty - The default difficulty **/
                 case "CASUAL":
                     D1 = new Dungeon
                         (
@@ -396,6 +415,15 @@ namespace LADXRandomizer
                     );
                     break;
             }
+        }
+
+        public List<Location> getLocations() {
+            return locs;
+        }
+
+        public List<Item> getProgressionItems() 
+        {
+            return progressionItems;
         }
 
         public Location getLocation(Location[] locs, long mem)
