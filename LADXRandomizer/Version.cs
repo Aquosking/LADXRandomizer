@@ -34,6 +34,7 @@ namespace LADXRandomizer
         public Requirement CanBeatD1;
         public Requirement CanPassOrAvoidRaccoon;
         public Requirement CanGetBowWow;
+        public Requirement CanDestroySwampFlower;
         public Requirement CanEnterD2;
         public Requirement CanGetSlimeKey;
         public Requirement CanEnterD3;
@@ -108,7 +109,9 @@ namespace LADXRandomizer
 
                     CanGetBowWow = delegate (List<Item> i) { return CanBeatD1(i); };
 
-                    CanEnterD2 = delegate (List<Item> i) { return CanGetBowWow(i) || Comparer.has(i, MAGIC_ROD) || Comparer.has(i, HOOKSHOT); };
+                    CanDestroySwampFlower = delegate (List<Item> i) { return CanGetBowWow(i) || Comparer.has(i, MAGIC_ROD) || Comparer.has(i, HOOKSHOT); };
+
+                    CanEnterD2 = delegate (List<Item> i) { return CanPassOrAvoidRaccoon(i) && CanDestroySwampFlower(i); };
 
                     CanGetSlimeKey = delegate (List<Item> i) { return false; };
 
@@ -224,7 +227,7 @@ namespace LADXRandomizer
                             0,
                             delegate (List<Item> i)
                             {
-                                return contains(i, ROCS_FEATHER) && (Comparer.contains(i, SWORD) || Comparer.contains(i, POWER_BRACELET));
+                                return contains(i, ROCS_FEATHER) && (contains(i, SWORD) || contains(i, POWER_BRACELET));
                             }
                         )
                     );
@@ -240,15 +243,21 @@ namespace LADXRandomizer
                             CanPassOrAvoidRaccoon
                         )
                     );
-                    /*
+                    
+                    /* Chest in Goponga Swamp */
                     locs.Add
                     (
                         new Location
                         (
-
+                            0x0034,
+                            0,                          
+                            delegate(List<Item> i)
+                            {
+                                return CanPassOrAvoidRaccoon(i) && CanDestroySwampFlower(i);
+                            }
                         )
                     );
-                    */
+
                     break;
             }
                     /*
@@ -388,7 +397,7 @@ namespace LADXRandomizer
                                 (
                                     0x0116,
                                     0,
-                                    delegate (List<Item> i)
+                                    delegate(List<Item> i)
                                     {
                                         return has(i, SWORD) || has(i, SHIELD);
                                     },
@@ -404,15 +413,44 @@ namespace LADXRandomizer
                         /* Locations of randomizable chests */
                         new List<Location>
                         {
-                            // 9 chests
+                                // 9 chests
+                                new Location
+                                (
+                                    0x0136,
+                                    0,
+                                    delegate(List<Item> i)
+                                    {
+                                        return has(i, POWER_BRACELET);
+                                    }
+                                ),
+                                new Location
+                                (
+                                    0x012E,
+                                    0,
+                                    delegate(List<Item> i)
+                                    {
+                                        return hasX(i, SMALL_KEY, 4) && has(i, SWORD) && has(i, ROCS_FEATHER);
+                                    }
+                                )
                         },
                         /* Items whose location can't be randomized, but getting them is important for requirements */
                         new List<Location>
                         {
-                            // 2 keys
-                        },
-                        3 // Randomizable keys
-                    );
+                                // 2 keys
+                                new Location
+                                (
+                                    0x0132,
+                                    0,
+                                    delegate(List<Item> i)
+                                    {
+                                        return has(i, SWORD) && has(i, MAGIC_POWDER);
+                                    },
+                                    new Item(SMALL_KEY)
+                                )
+
+                            },
+                            3 // Randomizable keys
+                        );
                     break;
             }
         }
